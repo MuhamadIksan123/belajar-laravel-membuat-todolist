@@ -1,0 +1,245 @@
+1. Membuat Projec Laravel
+2. Git commit
+3. Membuat User Service {Login}
++ Services
+-UserService.php
+-Impl/UserServiceImpl.php
+
++ Provider
+-UserServiceProvider.php
+--- public array $singletons
+--- public function provides(): array
+
++ test
+-UserServiceTest.php
+--- private UserService $userService
+--- protected function setUp(): void
+
++ config
+-app.php
+
++ Services
+-UserService.php
+--- function login()
+
+-Impl/UserServiceImpl.php
+--- private array $users
+--- function login()
+
++ test
+-UserServiceTest.php
+--- public function testLoginSuccess()
+--- public function testLoginNotFound()
+--- public function testLoginWrongPassword()
+
++template/resource/views
+- template.blade.php
+
++ routes/web.php
+- Route:view('/template', 'template')
+
++ App/Http/Controllers
+- UserController.php
+--- login(blm diisi)
+--- doLogin(blm diisi)
+--- doLogout(blm diisi)
+
++ routest/web.php
+- Route::controller()->group()
+- Route::('/login', 'login');
+- Route::('/login', 'doLogin');
+- Route::('/logout', 'doLogout');
+
+
++ views/user
+- login.blade.php
+--- title
+--- if error
+--- @csrf
+
++ App/Http/Controllers
+- UserController.php
+--- login(diisi)
+--- doLogin(blm diisi)
+--- doLogout(blm diisi)
+
++ test
+- UserControllerTest.Test
+--- testLoginPage()
+
++ App/Http/Controllers
+- UserController.php
+--- private UserService $userService
+--- doLogin(diisi)
+--- doLogout(blm diisi)
+
++ test
+- UserControllerTest.Test
+--- testLoginSuccess()
+--- testLoginValidationError()
+--- testLoginFailed()
+
++ coba di web
+
++ App/Http/Controllers
+- UserController.php
+--- doLogout(diisi)
+
++ test
+- UserControllerTest.Test
+--- testLogout()
+
++ middleware
+- OnlGuestMiddleware.php
+--- handle(diisi)
+
++ routest/web.php
+- Route::controller()->group()
+- Route::('/login', 'login')(OnlyGuestMiddleware);
+- Route::('/login', 'doLogin')(OnlyGuestMiddleware);
+- Route::('/logout', 'doLogout');
+
++ test
+- UserControllerTest.Test
+--- testLoginPageForMember();
+--- testLoginForUserAlreadyLogin();
+
+coba di web
+
++ middleware
+- OnlMemberMiddleware.php
+--- handle(diisi)
+
++ test
+- UserControllerTest.Test
+--- testLogoutGuest();
+
+4. HomeController
+
++ App/Http/Controllers
+- HomeController.php
+--- home(): RedirectResponse
+
++ routest/web.php
+- Route::get('/', [...HomeController::class, 'home'])
+
++ test
+- HomeControllerTest.php
+--- testGuest();
+--- testMember();
+
+5. TodolistController
++ Services
+-TodolistService.php
+-Impl/TodolistServiceImpl.php
+
++ Provider
+-TodolistServiceProvider.php
+--- implements DeferrableProvider
+--- public array $singletons
+--- public function provides(): array
+
++ config
+-app.php
+
++ test
+-TodolistServiceTest.php
+--- private TodolistService $todolistService
+--- protected function setUp(): void
+--- public function testTodolistNotNull()
+
++ Services
+- TodolistService.php
+--- function saveTodo(string $id, string $todo): void
+
+-Impl/UserServiceImpl.php
+--- private array $users
+--- function saveTodo(string $id, string $todo): void
+
++ test
+-TodolistServiceTest.php
+--- public function testSaveTodo()
+
++ Services
+- TodolistService.php
+--- function getTodolist(): array;
+
+-Impl/UserServiceImpl.php
+--- function getTodolist(): array;
+
++ test
+-TodolistServiceTest.php
+--- public function testGetTodolistEmpty()
+--- public function testGetTodolistNotEmpty()
+
++ Services
+- TodolistService.php
+--- function removeTodo()
+
+-Impl/UserServiceImpl.php
+--- function removeTodo()
+
++ test
+-TodolistServiceTest.php
+--- public function testRemoveTodo()
+
++ App/Http/Controllers
+- TodolistController.php
+--- todoList(blm diisi)
+--- addTodo(blm diisi)
+--- removeTodo(blm diisi)
+
++ routest/web.php
+- Route::controller()->middleware()->group()
+- Route::('/todolist', 'todoList');
+- Route::('/todolist', 'addTodo');
+- Route::('/todolist/{id}/delet', 'removeTodo');
+
+php artisan route:list
+
++ views/todolist
+- todolist.blade.php
+--- title
+--- if error
+--- foreach
+--- @csrf
+
++ App/Http/Controllers
+- TodolistController.php
+--- private Todolist $todolistService
+--- todoList(diisi)
+--- addTodo(blm diisi)
+--- removeTodo(blm diisi)
+
++ test
+- TodolistControllerTest
+--- public function testTodolist
+
+coba di web
+
++ App/Http/Controllers
+- TodolistController.php
+--- addTodo(diisi)
+--- removeTodo(blm diisi)
+
++ test
+- TodolistControllerTest
+--- public function testAddTodoFailed
+--- public function testAddTodoSuccess
+
+coba di web
+
++ views/todoliar
+- todolist.blade.php
+--- form(untuk delete)
+--- @csrf
+
++ App/Http/Controllers
+- TodolistController.php
+--- removeTodo(diisi)
+
++ test
+- TodolistControllerTest
+--- public function tesRemoveTodolist
+
+coba di web
